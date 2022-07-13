@@ -1,0 +1,4 @@
+app/__pycache__/
+app/models/
+app/data/sources/*.tex
+app/flagged

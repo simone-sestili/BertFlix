@@ -1,0 +1,40 @@
+{
+    "data_folder": "data",
+    "sources_folder": "sources",
+    "compute_embeddings": false,
+    "dataset" : {
+        "filename": "dataset.csv",
+        "target_words": 100,
+        "country": "IT",
+        "min_year": 1990
+    },
+    "model": {
+        "folder": "models",
+        "bi_encoder": "multi-qa-mpnet-base-dot-v1",
+        "cross_encoder": "cross-encoder/ms-marco-MiniLM-L-12-v2"
+    },
+    "embeddings": {
+        "filename": "embeddings_32.pkl",
+        "batch_size": 32
+    },
+    "search": {
+        "top_k": 32,
+        "monetization": ["free", "flatrate", "ads"],
+        "date_reranking": {
+            "max_increment": 0.28,
+            "slope": 0.2,
+            "step": "year"
+        }
+    },
+    "available_providers": [
+        "Netflix",
+        "Amazon Prime Video",
+        "Disney Plus",
+        "Now TV",
+        "Mediaset Play",
+        "Rai Play"
+    ],
+    "tests": [
+        ["New york adventure", 5, 16, true, ["Netflix"]]
+    ]
+}
