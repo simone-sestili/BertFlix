@@ -4,7 +4,7 @@ The purpose of this application is to implement a semantic search on a database 
 
 ## Installation
 
-The application is entirely build in Python 3.9, all the necessary dependencies can be installed by running:
+The application is entirely built in Python 3.9, all the necessary dependencies can be installed by running:
 ```
 pip install -r requirements.txt
 ```
@@ -12,7 +12,7 @@ If Anaconda is already installed, a clean installation of the application can be
 
 ## Back-end
 
-The semantic search is powered by a BERT model, using the `sentence-transformers` public library; in particular, the search is done by means of a bi-encoder, to filter out the best $K$ results, and a cross-encoder to improve results ranking; both this models are defined in the application's configuration file at `/app/config.json`.
+The semantic search is powered by a BERT model, using the [sentence-transformers](https://sbert.net/) public library; in particular, the search is done by means of a bi-encoder, to filter out the best $K$ results, and a cross-encoder to improve results ranking; both this models are defined in the application's configuration file at `/app/config.json`.
 
 The whole application will be executed by running `python main.py`, since this will handle the documents preprocessing, the models download, the embeddings pre-computing, the actual search process, and the front-end implementation.
 
