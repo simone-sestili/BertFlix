@@ -1,4 +1,4 @@
-app/__pycache__/
+*__pycache__*
 app/models/
 app/flagged
 *.bat

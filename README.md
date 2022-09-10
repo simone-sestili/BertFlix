@@ -28,9 +28,3 @@ The output is displayed as a JSON file, in which each element is defined by the 
 
 # Dataset
 The dataset of titles is updated manually by scraping the [JustWatch](https://www.justwatch.com/) platform, a popular website with information about movies/tv-shows, such as plots, ratings and most importantly the platforms on which the items are currently available. The website's contents are accessed through an unofficial [Python wrapper](https://github.com/dawoudt/JustWatchAPI) of the JustWatch API, which is loaded in the project as a library from PyPI.
-
-
-cluster similar cross-scores
-re-rank clusters by user evaluation
-
-show images

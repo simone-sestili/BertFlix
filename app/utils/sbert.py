@@ -302,19 +302,19 @@ def text_rerank(query: str, df: pd.DataFrame, corpus_names: list, search_hits: l
     
     results = search_hits
     for idx, score in enumerate(cross_scores):
-        results[idx]['cross_score'] = cross_scores[idx]
-    results = sorted(results, key=lambda x: x['cross_score'], reverse=True)
+        results[idx]['score'] = cross_scores[idx]
+    results = sorted(results, key=lambda x: x['score'], reverse=True)
     
     # show results
     for res in results[:results_to_show]:
-        print('Score', round(res['cross_score'], 3))
+        print('Score', round(res['score'], 3))
         for col in cols_to_show:
             print(df.iloc[res['corpus_id']][col])
     
     return results
 
 
-def date_reranking(hits: list, df: pd.DataFrame, max_increment: float, slope: float, step: str = 'year'):
+def date_reranking(hits: list, df: pd.DataFrame, max_increment: float, slope: float, step: str = 'year') -> list:
     """
     Updates the scores in the list of the search hits by adding a value that it higher the closer each hits is to the current date.
     When the hit is 0 steps away from the current date then it would take the max_increment, then it will lose a 'slope' amount
@@ -327,9 +327,39 @@ def date_reranking(hits: list, df: pd.DataFrame, max_increment: float, slope: fl
         diff = (now - date).total_seconds()
         if step == 'year':
             diff = int(diff / (365*24*60*60))
-        hit['cross_score'] += max(0, max_increment - slope*diff)
-    hits = sorted(hits, key=lambda x: x['cross_score'], reverse=True)
+        hit['score'] += max(0, max_increment - slope*diff)
+    hits = sorted(hits, key=lambda x: x['score'], reverse=True)
     return hits
+
+
+def cluster_reranking(hits: list, df: pd.DataFrame, col_to_rank: str, num_clusters: int = 10) -> list:
+    """
+    This function first groups the search hits into clusters, according to their score and a uniform
+    distribution of the "score space" into a fixed given number of clusters. Then each cluster is
+    internally re-ranked (thus preserving the ordering of the clusters) according to metric value
+    that is the column 'col_to_rank' in the given dataset.
+    """
+    # get minimum and maximum score
+    min_score = min([hit['score'] for hit in hits])
+    max_score = max([hit['score'] for hit in hits])
+    # define score-width of each cluster
+    cluster_width = (max_score - min_score) / num_clusters
+    # define list of clusters with similar score
+    clusters = []
+    for i in range(num_clusters):
+        clusters.append([hit for hit in hits if max_score-cluster_width*(i+1) <= hit['score'] <= max_score-cluster_width*i])
+    # re-rank each cluster
+    out = []
+    for cluster in clusters:
+        print(cluster)
+        cluster_rankings = {hit['corpus_id']: df.iloc[hit['corpus_id']][col_to_rank] for hit in cluster}
+        cluster_ordering = dict(sorted(cluster_rankings.items(), key=lambda x: x[1], reverse=True))
+        print('rankings', cluster_ordering)
+        for id in cluster_ordering.keys():
+            hit_id = [hit for hit in cluster if hit['corpus_id'] == id][0]
+            out.append(hit_id)
+    assert len(out) == len(hits)
+    return out
 
 
 

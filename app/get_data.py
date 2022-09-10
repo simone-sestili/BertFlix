@@ -65,6 +65,31 @@ def get_jw_title(jw: JustWatch, title_id: str):
     return info
 
 
+def merge_duplicates(res: list) -> list:
+    """
+    There may be some scenarios in which two different items have the same title and year,
+    but different ids since they have different pages for different providers; this function merges them.
+    """
+    out = []
+    unique_els = []
+    for el in res:
+        if f"{el['title']}-{el['year']}" not in unique_els:
+            unique_els.append(f"{el['title']}-{el['year']}")
+            group = [x for x in res if x['title'] == el['title'] and x['year'] == el['year']]
+            group_ratings = [x['rating'] for x in group if x['rating'] != '']
+            group_providers = []
+            for x in group:
+                group_providers.extend(x['providers'])
+            out.append({
+                'title': group[0]['title'],
+                'year': group[0]['year'],
+                'text': group[0]['text'],
+                'rating': round(sum(group_ratings) / len(group_ratings), 1) if len(group_ratings) > 0 else '',
+                'providers': group_providers
+            })
+    return out
+
+
 def justwatch_dataset(jw: JustWatch, config: dict) -> pd.DataFrame:
     """
     This function creates a dataset of movies and tv shows listed on the
@@ -94,6 +119,7 @@ def justwatch_dataset(jw: JustWatch, config: dict) -> pd.DataFrame:
                 }
                 
                 # add average rating
+                tmp['rating'] = ''
                 if 'scoring' in info.keys():
                     ratings = []
                     for score in info['scoring']:
@@ -103,6 +129,7 @@ def justwatch_dataset(jw: JustWatch, config: dict) -> pd.DataFrame:
                         tmp['rating'] = round(sum(ratings) / len(ratings), 1)
                 
                 # add list of providers
+                tmp['providers'] = []
                 if 'offers' in info.keys():
                     providers = []
                     for offer in info['offers']:
@@ -115,6 +142,9 @@ def justwatch_dataset(jw: JustWatch, config: dict) -> pd.DataFrame:
                         tmp['providers'] = providers
                 
                 out.append(tmp)
+    
+    # merge duplicates by different providers
+    out = merge_duplicates(out)
 
     # convert to dataframe and remove duplicates (i.e. same title, same plot, same year)
     df_out = pd.DataFrame(out)

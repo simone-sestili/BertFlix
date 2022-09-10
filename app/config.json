@@ -1,7 +1,8 @@
 {
     "data_folder": "data",
     "sources_folder": "sources",
-    "compute_embeddings": false,
+    "update_dataset": false,
+    "update_embeddings": false,
     "dataset" : {
         "filename": "dataset.csv",
         "target_words": 100,
@@ -20,9 +21,12 @@
     "search": {
         "top_k": 32,
         "monetization": ["free", "flatrate", "ads"],
+        "rating_reranking": {
+            "num_clusters": 10
+        },
         "date_reranking": {
-            "max_increment": 0.28,
-            "slope": 0.2,
+            "max_increment": 0.4,
+            "slope": 0.02,
             "step": "year"
         }
     },
