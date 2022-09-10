@@ -5,19 +5,15 @@ The purpose of this application is to implement a semantic search on a database 
 # Installation
 ## Using Python
 
-The application is entirely build in Python 3.9, all the necessary dependencies can be installed by running:
+The application is entirely built in Python 3.9, all the necessary dependencies can be installed by running:
 ```
 pip install -r requirements.txt
 ```
-When doing so it is suggested to create an ad-hoc Python environment with all the necessary dependencies. Then it is required to use the following commands, in order, to create the dataset, create the model embeddings, and finally run the application:
-```
-python main.py
-```
-## Using Docker
-The application can be entirely deployed as a ready-for Docker container. The Docker image can be created by simply running the script `helper_make.sh` and then the Docker container can be run by simply running the script `run.sh`.
+If Anaconda is already installed, a clean installation of the application can be done by simply running `helper_make.bat`, which creates an ad-hoc environment with all the necessary dependencies. In this scenario, the application can be executed by simply running `run.bat`.
 
-# Back-end
-The semantic search is powered by a BERT model, using the `sentence-transformers` public library; in particular, the search is done by means of a bi-encoder, to filter out the best $K$ results, and a cross-encoder to improve results ranking; both this models are defined in the application's configuration file at `/app/config.json`.
+## Back-end
+
+The semantic search is powered by a BERT model, using the [sentence-transformers](https://sbert.net/) public library; in particular, the search is done by means of a bi-encoder, to filter out the best $K$ results, and a cross-encoder to improve results ranking; both this models are defined in the application's configuration file at `/app/config.json`.
 
 The whole application will be executed by running `python main.py`, since this will handle the data retrieval, the models download, the embeddings pre-computing, the actual search process, and the front-end implementation.
 
@@ -30,6 +26,8 @@ The application is accessed through the `gradio` tool for developing web interfa
 
 The output is displayed as a JSON file, in which each element is defined by the document's name, the corresponding section title, and the actual text that matched the user query. 
 
+# Dataset
+The dataset of titles is updated manually by scraping the [JustWatch](https://www.justwatch.com/) platform, a popular website with information about movies/tv-shows, such as plots, ratings and most importantly the platforms on which the items are currently available. The website's contents are accessed through an unofficial [Python wrapper](https://github.com/dawoudt/JustWatchAPI) of the JustWatch API, which is loaded in the project as a library from PyPI.
 
 
 cluster similar cross-scores
