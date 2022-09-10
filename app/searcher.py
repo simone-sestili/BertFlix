@@ -3,12 +3,10 @@ import json
 
 from datetime import datetime
 from justwatch import JustWatch
-from sbert import load_data, load_model, load_embeddings, text_search, text_rerank, date_reranking, text_length_histogram
 
-from utils import list_intersection
-from get_data import justwatch_dataset, get_providers_map
-from processing import processing
-
+from get_data import justwatch_dataset
+from utils.utils import list_intersection
+from utils.sbert import load_data, load_model, load_embeddings, text_search, text_rerank, date_reranking, text_length_histogram, processing
 
 
 class Searcher:
@@ -18,7 +16,6 @@ class Searcher:
         self.config = config
         
         self.justwatch = JustWatch(country=self.config['dataset']['country'])
-        self.providers_map = get_providers_map(self.justwatch)
         
         # creates data folder
         if not os.path.exists(self.config['data_folder']):
@@ -57,31 +54,6 @@ class Searcher:
     
     def show_data_distribution(self) -> None:
         text_length_histogram(self.dataset['text'].tolist())
-    
-    
-    def add_title_metadata(self, res: list) -> list:
-        out = []
-        for el in res:
-            try:
-                info = self.justwatch.get_title(title_id=el['title_id'])
-            except:
-                continue
-            if 'offers' in info.keys() and 'scoring' in info.keys():
-                providers = []
-                for offer in info['offers']:
-                    if offer['monetization_type'] in self.config['search']['monetization']:
-                        provider_name = self.providers_map[offer['provider_id']]
-                        if provider_name not in providers:
-                            providers.append(provider_name)
-                el['providers'] = providers
-                ratings = []
-                for score in info['scoring']:
-                    if score['provider_type'].split(':')[1] == 'score':
-                        ratings.append(score['value'])
-                ave_rating = round(sum(ratings) / len(ratings), 1)
-                el['rating'] = ave_rating
-                out.append(el)
-        return out
     
     
     def merge_duplicates(self, res: list) -> list:
@@ -155,8 +127,7 @@ class Searcher:
         # get sub-dataset of results
         result_ids = [el['corpus_id'] for el in search_hits]
         results = self.dataset.iloc[result_ids].to_dict('records')
-        
-        results = self.add_title_metadata(results)
+
         results = self.merge_duplicates(results)
         
         return self.filter_by_providers(results, providers)[:limit]

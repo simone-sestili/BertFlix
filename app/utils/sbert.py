@@ -14,8 +14,8 @@ from tqdm.autonotebook import tqdm
 from torch.utils.data import DataLoader
 from sentence_transformers import SentenceTransformer, CrossEncoder, util, InputExample, losses, evaluation
 
-from utils import load_pickle, dump_pickle
-from opt import fair_sequence_division_order
+from utils.utils import load_pickle, dump_pickle
+from utils.opt import fair_sequence_division_order
 
 
 
@@ -46,6 +46,12 @@ def pipeline(text: str, strings_to_exclude: list = []) -> str:
             return ''
 
     return text
+
+
+def processing(text: str) -> str:
+    # split text to reduce size
+    # sub_paragraphs = text_length_reduction(text, target_words, '\n')
+    return text.lower().strip('\n').strip()
 
 
 

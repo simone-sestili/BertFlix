@@ -1,0 +1,1 @@
+docker build -t bertflix:1.0 .
