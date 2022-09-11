@@ -19,8 +19,8 @@ demo = gr.Interface(
     fn=user_search,
     inputs=[
         gr.Textbox(lines=2, placeholder="Adventure in New York", label="User Query"),
-        gr.Slider(minimum=0, maximum=100, value=10, step=1, label="Number of results to show"),
-        gr.Slider(minimum=1, maximum=100, step=1, value=config['search']['top_k'], label="Number of results to rank"),
+        gr.Slider(minimum=1, maximum=128, value=10, step=1, label="Number of results to show"),
+        gr.Slider(minimum=1, maximum=128, step=1, value=config['search']['top_k'], label="Number of results to rank"),
         gr.Checkbox(value=False, label="Prioritize latest contents"),
         gr.CheckboxGroup(choices=config['available_providers'])
     ],

@@ -39,6 +39,10 @@
         "Rai Play"
     ],
     "tests": [
-        ["New york adventure", 5, 16, true, ["Netflix"]]
+        ["Avventura a New York", 5, 16, true, ["Netflix"]],
+        ["Supereroi cosmici", 10, 32, true, ["Netflix", "Amazon Prime Video"]],
+        ["Show di cucina e pizza", 3, 16, false, ["Netflix", "Rai Play"]],
+        ["Commedia italiana", 10, 32, false, ["Rai Play", "Mediaset Play", "Amazon Prime Video"]],
+        ["Documentario su Google", 10, 64, true, ["Netflix", "Disney Plus", "Amazon Prime Video"]]
     ]
 }

@@ -351,10 +351,8 @@ def cluster_reranking(hits: list, df: pd.DataFrame, col_to_rank: str, num_cluste
     # re-rank each cluster
     out = []
     for cluster in clusters:
-        print(cluster)
         cluster_rankings = {hit['corpus_id']: df.iloc[hit['corpus_id']][col_to_rank] for hit in cluster}
         cluster_ordering = dict(sorted(cluster_rankings.items(), key=lambda x: x[1], reverse=True))
-        print('rankings', cluster_ordering)
         for id in cluster_ordering.keys():
             hit_id = [hit for hit in cluster if hit['corpus_id'] == id][0]
             out.append(hit_id)

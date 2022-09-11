@@ -1,6 +1,12 @@
-# BerTeX
+# BertFlix
 
-The purpose of this application is to implement a semantic search on a database of documents written in LaTeX.
+Have you ever tried to search for a content on Netflix? Well, good luck! In 2022 the integrated search is still basically a syntactic search, which returns only the contents whose title matches your query, and then it goes almost on random.
+
+The purpose of this application is to implement a semantic search engine on a database of movies and shows from several platforms, such an engine is therefore able to search content that matches the *meaning* of your query, and not the exact words that your used, and for doing that it searches on the whole plot.
+
+The application also allows to filter out content from specific platforms that you do not use, to influence the search engine to prioritize newer title (all other things being equal) and it is also designed to automatically give priority to titles with higher average scores.
+
+Please consider that the platform distribution of a title is highly country-dependant, therefore this application is designed to work for an *italian audience only*.
 
 # Installation
 ## Using Python
@@ -9,9 +15,14 @@ The application is entirely built in Python 3.9, all the necessary dependencies 
 ```
 pip install -r requirements.txt
 ```
-If Anaconda is already installed, a clean installation of the application can be done by simply running `helper_make.bat`, which creates an ad-hoc environment with all the necessary dependencies. In this scenario, the application can be executed by simply running `run.bat`.
+When doing so it is suggested to create an ad-hoc Python environment with all the necessary dependencies. Then the application can be executed by simply running:
+```
+python main.py
+```
+## Using Docker
+The application can be entirely deployed as a ready-for Docker container. The Docker image can be created by simply running the script `helper_make.sh` and then the Docker container can be run by simply running the script `run.sh`.
 
-## Back-end
+# Back-end
 
 The semantic search is powered by a BERT model, using the [sentence-transformers](https://sbert.net/) public library; in particular, the search is done by means of a bi-encoder, to filter out the best $K$ results, and a cross-encoder to improve results ranking; both this models are defined in the application's configuration file at `/app/config.json`.
 

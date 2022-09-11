@@ -120,16 +120,17 @@ class Searcher:
             )
         
         # re-rank results with similar scores according to their 'rating' value
-        search_hits = cluster_reranking(
-            hits=search_hits,
-            df=self.sub_dataset,
-            col_to_rank='rating',
-            num_clusters=self.config['search']['rating_reranking']['num_clusters']
-        )
+        if len(search_hits) > 1:
+            search_hits = cluster_reranking(
+                hits=search_hits,
+                df=self.sub_dataset,
+                col_to_rank='rating',
+                num_clusters=self.config['search']['rating_reranking']['num_clusters']
+            )
         
         # get rows of sub_dataset corresponding to results
         result_ids = [el['corpus_id'] for el in search_hits]
-        results = self.sub_dataset.iloc[result_ids].drop(columns=['Unnamed: 0', 'date']).to_dict('records')
+        results = self.sub_dataset.iloc[result_ids][['title', 'year', 'rating', 'providers', 'text']].to_dict('records')
         
         return results[:limit]
 
