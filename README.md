@@ -1,5 +1,7 @@
 # BertFlix
 
+[PLEASE CONSIDER THAT THIS PROJECT IS MEANT FOR EDUCATIONAL PURPOSES ONLY]
+
 Have you ever tried to search for a content on Netflix? Well, good luck! In 2022 the integrated search is still basically a syntactic search, which returns only the contents whose title matches your query, and then it goes almost on random.
 
 The purpose of this application is to implement a semantic search engine on a database of movies and shows from several platforms, such an engine is therefore able to search content that matches the *meaning* of your query, and not the exact words that your used, and for doing that it searches on the whole plot.
